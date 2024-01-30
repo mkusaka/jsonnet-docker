@@ -28,17 +28,29 @@ jobs:
           fetch-depth: 0
           repository: 'google/jsonnet'
           path: 'jsonnet'
+      - name: Checkout specific jsonnet version
+        working-directory: jsonnet
+        run: |
+          VERSION_TAG=$(cat ../root/jsonnet-version)
+          git fetch --depth=1 origin tag $VERSION_TAG
+          git checkout $VERSION_TAG
+
       - name: build & push to GitHub Container Registry
         working-directory: jsonnet
         run: |
-          value=$(cat ../root/incr)
-          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
-          echo $latest_tag > ../root/jsonnet-version # for renovate
-          TAG="ghcr.io/${{ github.repository }}:$latest_tag.$value"
+          SUFFIX=$(cat ../root/incr)
+          VERSION_TAG=$(cat ../root/jsonnet-version)
+          TAG="ghcr.io/${{ github.repository }}:$VERSION_TAG.$SUFFIX"
           echo "TAG: $TAG"
           docker build -t "${TAG}" .
+
+          LATEST_TAG="ghcr.io/${{ github.repository }}:latest"
+          echo "LATEST_TAG: $LATEST_TAG"
+          docker build -t "${LATEST_TAG}" .
+
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login -u "${{ github.actor }}" --password-stdin ghcr.io
           docker push "${TAG}"
+          docker push "${LATEST_TAG}"
         env:
           DOCKER_BUILDKIT: 1
       - name: push new incr value
