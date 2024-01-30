@@ -21,17 +21,6 @@ Replace `your_file.jsonnet` with the actual name of your Jsonnet file, or use `*
 
 # Tags
 
-Here's a polished introduction for your repository:
-
-This repository offers a Docker image for google/jsonnet, providing a streamlined way to utilize Jsonnet within Docker environments. Designed for ease of use and efficiency, our Docker image simplifies the process of integrating Jsonnet into your workflows, ensuring a seamless development experience.
-
-Usage
-To get started, simply pull the latest version of the Docker image using the following command:
-
-bash
-Copy code
-docker pull ghcr.io/mkusaka/jsonnet-docker:latest
-Tags
 For a detailed list of all available tags and versions, please visit the package page: https://github.com/mkusaka/jsonnet-docker/pkgs/container/jsonnet-docker
 
 Whether you're working on complex configurations or straightforward projects, this Jsonnet Docker image is crafted to meet your needs, ensuring reliability and consistency across your deployments.
