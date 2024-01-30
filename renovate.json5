@@ -1,6 +1,7 @@
 {
   $schema: "https://docs.renovatebot.com/renovate-schema.json",
   extends: ["config:recommended"],
+  automerge: true,
   customManagers: [
     {
       customType: "regex",
@@ -8,7 +9,7 @@
       matchStrings: ['(?<currentValue>.*)'],
       datasourceTemplate: "github-releases",
       // extractVersionTemplate: "^v(?<version>.*)$",
-      depNameTemplate: "google/jsonnet",
-    },
-  ],
+      depNameTemplate: "google/jsonnet"
+    }
+  ]
 }
