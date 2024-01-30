@@ -16,18 +16,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Clone repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
+        with:
+          path: 'root'
       
       - name: Clone jsonnet repository
         uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           repository: 'google/jsonnet'
           path: 'jsonnet'
       - name: build & push to GitHub Container Registry
         working-directory: jsonnet
         run: |
-          value=$(cat ../incr)
-          TAG="ghcr.io/${{ github.repository }}:$(git describe --tags $(git rev-list --tags --max-count=1)).${value}"
+          value=$(cat ../root/incr)
+          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1))
+          echo $latest_tag > ../root/jsonnet-version # for renovate
+          TAG="ghcr.io/${{ github.repository }}:$latest_tag.$value"
           echo "TAG: $TAG"
           docker build -t "${TAG}" .
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login -u "${{ github.actor }}" --password-stdin ghcr.io
@@ -35,6 +40,7 @@ jobs:
         env:
           DOCKER_BUILDKIT: 1
       - name: push new incr value
+        working-directory: root
         run: |
           value=$(cat incr)
           new_value=$((value + 1))
@@ -43,4 +49,5 @@ jobs:
           git config user.name  "actions-user"
           git config user.email "action@github.com"
           git commit -m "increment file"
+          git push origin HEAD
 
