@@ -12,7 +12,7 @@ Running Jsonnet Commands
 You can run Jsonnet commands such as jsonnetfmt directly through the Docker container. For example, to format Jsonnet files in your current directory, you can mount your current directory to the container and execute jsonnetfmt:
 
 ```bash
-docker run --rm -v $(pwd):/workspace -w /workspace ghcr.io/mkusaka/jsonnet-docker:latest jsonnetfmt -i your_file.jsonnet
+docker run --rm -v $(pwd):/workspace -w /workspace --entrypoint "jsonnetfmt" ghcr.io/mkusaka/jsonnet-docker:latest -i your_file.jsonnet
 ```
 
 This command mounts your current directory (`$(pwd)`) to `/workspace` inside the container and sets it as the working directory (`-w /workspace`). `jsonnetfmt -i your_file.jsonnet` is then executed to format the specified Jsonnet file in place.
